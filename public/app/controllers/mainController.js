@@ -1,5 +1,6 @@
 app.controller('mainController', function ($scope, $interval, $timeout) {
   var images = {};
+  var jumping = false;
   var running = false;
   var totalResources = 4;
   var numResourcesLoaded = 0;
@@ -8,34 +9,21 @@ app.controller('mainController', function ($scope, $interval, $timeout) {
   window.onload = function () {
     canvas = document.getElementById('canvasId');
 
-    
+
 
     document.addEventListener('keydown', function (event) {
       if (event.keyCode == 38) {
-        if (!running) {
-          running = true;
+        if (!jumping) {
+          jumping = true;
           $timeout(function () {
 
-            running = false;
+            jumping = false;
           }, 500);
         };
       }
     }, false);
-  };
-  $scope.run = function (e) {
-    console.log(1);
-    // if (!running) {
-    //   running = true;
-    //   $timeout(land, 500);
-    // };
 
   };
-
-  // var land = function () {
-
-  //   running = false;
-  // };
-
 
   $scope.loadImage = function (name) {
 
@@ -61,15 +49,19 @@ app.controller('mainController', function ($scope, $interval, $timeout) {
       var charX = 245;
       var charY = 185;
       var jumpHeight = 30;
+      var runningHeight = 30;
       var redraw = function () {
         var x = charX;
         var y = charY;
         canvasId.width = canvasId.width;
-        if (running) {
+        if (jumping) {
           y -= jumpHeight;
         }
-        context.drawImage(images["spongebob1"], x, y, x + 40, y - 42);
         if (running) {
+          x -= runningHeight;
+        }
+        context.drawImage(images["spongebob1"], x, y, x + 40, y - 42);
+        if (jumping) {
 
           context.drawImage(images["leftLeg2"], x, y, x + 40, y - 42);
 
